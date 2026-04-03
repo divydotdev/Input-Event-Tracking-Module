@@ -1,82 +1,105 @@
-# Input-Event-Tracking-Module
-Designed and implemented an OS-level keyboard event monitoring system using low-level input hooks. Processed and logged input events for behavioral analysis and security auditing while ensuring responsible data handling and minimal system overhead.
+# 🔒 Input-Event-Tracking-Module
 
+An educational demonstration module that collects keyboard events, active-application context, screenshots, system info and (optionally) webcam frames. This repo is intended for controlled, consented classroom or lab use only.
 
-Overview
+========================
 
-The Input Event Tracking Module is an educational project designed to demonstrate how operating systems capture and process keyboard input events. The project focuses on system-level input handling, event-driven programming, and security awareness, implemented strictly for authorized learning environments.
+✨ Why this README looks different
 
-Features
+- Clear, modern layout for presentations
+- Strong safety, legal & consent warnings up front
+- Quick start steps and a safe demo path so you can show results without capturing real users
 
-Captures keyboard input events (key press / release)
+========================
 
-Records events with timestamps for analysis
+⚠️ Legal & Ethical Notice
 
-Session-based local logging
+Keylogging and recording users' activity can be illegal and violate privacy in many jurisdictions. Do NOT run this script on any system you do not own or without explicit, documented consent from everyone involved. This repository is provided for educational purposes only — improper use is your responsibility.
 
-Explicit start / stop controls
+========================
 
-Clear indication when tracking is active
+🚨 Quick Safety Checklist (read before running)
 
-Learning Objectives
+- Use a disposable Windows VM or isolated lab machine.
+- Notify and obtain written consent from participants.
+- Use test-only email accounts for any SMTP credentials.
+- Consider disabling network access to prevent data exfiltration during demos.
 
-This project helps learners understand:
+========================
 
-How keyboard input flows from hardware to software
+🚀 Quick Start (recommended: disposable Windows VM)
 
-OS-level input event handling mechanisms
+1. Copy `.env.example` to `.env` and populate values locally (do NOT commit `.env`).
 
-Event-driven programming concepts
+2. Create and activate a Python virtual environment and install dependencies:
 
-Security risks associated with improper input monitoring
+```powershell
+python -m venv .venv
+.\\.venv\\Scripts\\Activate.ps1    # PowerShell
+# or: .\\.venv\\Scripts\\activate.bat  # cmd
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-Importance of ethical and consent-based system tools
+3. Populate `.env` with test values (or leave SMTP fields empty to skip sending).
 
-Scope
-Included
+4. Run (inside the VM):
 
-Keyboard event capture
+```powershell
+python Keylogger.py
+```
 
-Structured event logging
+========================
 
-Local data storage
+🎯 Recommended Safe Demo Modes
 
-User-controlled execution
+Use one of these to present results without recording real users:
 
-Excluded
+- Demo Mode (manual): Before running, edit `Keylogger.py` and comment out calls to `keyboard.on_press`, `screenshot()` and `capture_camera()` and instead write simulated entries into `document.txt` and `applicationLog.txt`.
+- Network-disabled demo: Disconnect the VM from the network or block outbound SMTP so data is never transmitted.
+- Simulated-data script: I can add a `--demo` or `TEST_MODE` flag that populates sample data and skips all hardware/network capture — tell me if you want this added.
 
-Password or credential capture
+========================
 
-Background or stealth execution
+Files of interest
 
-Remote data transmission
+- `Keylogger.py` — main script that captures events and sends attachments via SMTP
+- `.env.example` — example env variables (copy to `.env` and fill locally)
+- `requirements.txt` — Python dependencies
 
-Unauthorized monitoring
+========================
 
-Ethical Use Statement
+Configuration notes
 
-This project is intended solely for educational and research purposes.
-It operates only with explicit user consent and does not include persistence, stealth behavior, or data exfiltration mechanisms.
+- `.env` variables (copy from `.env.example`):
 
-Technologies Used
+```
+EMAIL_SENDER=sender@example.com
+EMAIL_RECEIVER=receiver@example.com
+SMTP_SERVER=smtp.example.com
+SMTP_PORT=587
+EMAIL_USERNAME=user@example.com
+EMAIL_PASSWORD=your_app_password_here
+```
 
-Programming Language: (add yours — e.g., Java / Python / C++)
+- If you leave these blank, the script will skip email sending.
 
-Platform: (Windows / Linux / Cross-platform)
+========================
 
-Concepts: OS-level input handling, event hooks, secure logging
+Best practices for your presentation
 
-How It Works (High Level)
+- Prepare a short slide that explains legality and consent before the demo.
+- Use prerecorded/simulated input for the live demo to avoid privacy risks.
+- Show `document.txt`, `applicationLog.txt`, `syseminfo.txt`, and the generated images as the outputs.
 
-User explicitly enables input tracking
+========================
 
-The module listens for keyboard input events
+Want me to add a safe `--demo` flag?
 
-Events are timestamped and stored locally
+If you'd like, I can update `Keylogger.py` to provide a `--demo` mode that disables live capture and sending and instead generates deterministic sample output for a risk-free presentation. Reply "Add demo mode" and I'll implement it.
 
-Logged data is used for analysis and learning
+========================
 
-Disclaimer
+Credits & License
 
-Do not deploy this tool on systems without proper authorization.
-Misuse of input monitoring software may violate privacy and legal regulations.
+This project is educational. Use responsibly.

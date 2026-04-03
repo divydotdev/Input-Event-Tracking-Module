@@ -1,3 +1,10 @@
+keyboard
+python-dotenv
+requests
+Pillow
+psutil
+pywin32
+opencv-python
 Flask>=3.0.0
 Flask-CORS>=4.0.0
 Flask-SocketIO>=5.3.0

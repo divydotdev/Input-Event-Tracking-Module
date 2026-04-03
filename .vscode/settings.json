@@ -1,0 +1,4 @@
+{
+  "python.envFile": "${workspaceFolder}/Input-Event-Tracking-Module/.env",
+  "python.terminal.activateEnvironment": true
+}
