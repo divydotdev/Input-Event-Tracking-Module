@@ -1,6 +1,20 @@
+<table width="100%">
+<tr>
+<td align="center">
+
+<div align="center">
+
 # 🚀 Future Roadmap — Input-Event-Tracking-Module
 
+</div>
+
 This document outlines planned enhancements and directions for educational and cybersecurity research purposes.
+
+</td>
+</tr>
+</table>
+
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 ---
 

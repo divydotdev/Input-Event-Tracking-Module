@@ -1,8 +1,20 @@
+<table width="100%">
+<tr>
+<td align="center">
+
+<div align="center">
+
 # 🔒 Input-Event-Tracking-Module
 
-An educational demonstration module that collects keyboard events, active-application context, screenshots, system info and (optionally) webcam frames. This repo is intended for controlled, consented classroom or lab use only.
+</div>
 
-========================
+<p align="center">An educational demonstration module that collects keyboard events, active-application context, screenshots, system info and (optionally) webcam frames. This repo is intended for controlled, consented classroom or lab use only.</p>
+
+</td>
+</tr>
+</table>
+
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 ✨ Why this README looks different
 
@@ -10,13 +22,13 @@ An educational demonstration module that collects keyboard events, active-applic
 - Strong safety, legal & consent warnings up front
 - Quick start steps and a safe demo path so you can show results without capturing real users
 
-========================
+<div align="center">╰──────────── ✦ ────────────╯</div>
 
 ⚠️ Legal & Ethical Notice
 
 Keylogging and recording users' activity can be illegal and violate privacy in many jurisdictions. Do NOT run this script on any system you do not own or without explicit, documented consent from everyone involved. This repository is provided for educational purposes only — improper use is your responsibility.
 
-========================
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 🚨 Quick Safety Checklist (read before running)
 
@@ -25,7 +37,7 @@ Keylogging and recording users' activity can be illegal and violate privacy in m
 - Use test-only email accounts for any SMTP credentials.
 - Consider disabling network access to prevent data exfiltration during demos.
 
-========================
+<div align="center">╰──────────── ✦ ────────────╯</div>
 
 🚀 Quick Start (recommended: disposable Windows VM)
 
@@ -49,7 +61,7 @@ pip install -r requirements.txt
 python Keylogger.py
 ```
 
-========================
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 🎯 Recommended Safe Demo Modes
 
@@ -59,7 +71,7 @@ Use one of these to present results without recording real users:
 - Network-disabled demo: Disconnect the VM from the network or block outbound SMTP so data is never transmitted.
 - Simulated-data script: I can add a `--demo` or `TEST_MODE` flag that populates sample data and skips all hardware/network capture — tell me if you want this added.
 
-========================
+<div align="center">╰──────────── ✦ ────────────╯</div>
 
 Files of interest
 
@@ -67,7 +79,7 @@ Files of interest
 - `.env.example` — example env variables (copy to `.env` and fill locally)
 - `requirements.txt` — Python dependencies
 
-========================
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 Configuration notes
 

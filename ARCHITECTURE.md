@@ -1,6 +1,20 @@
+<table width="100%">
+<tr>
+<td align="center">
+
+<div align="center">
+
 # 🏗️ Architecture — Input-Event-Tracking-Module
 
+</div>
+
 This document describes the system architecture, component structure, and data flow of the Input-Event-Tracking-Module.
+
+</td>
+</tr>
+</table>
+
+<div align="center">╭──────────── ✦ ────────────╮</div>
 
 ---
 
